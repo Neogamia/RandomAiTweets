@@ -16,7 +16,7 @@ const twitterClient = new TwitterApi({
     accessSecret: process.env.TwitterAccessTokenSecret
 });
 
-// const user = await twitterClient.v2.userByUsername('Even7iv');
+//const user = await twitterClient.v2.userByUsername('Even7iv');
 
 async function post() {
     fs.readFile('words.txt', 'utf-8', async (err, data) => {
@@ -29,26 +29,28 @@ async function post() {
         var w1 = lines[Math.floor(Math.random() * lines.length)];
         var w2 = lines[Math.floor(Math.random() * lines.length)];
         var w3 = lines[Math.floor(Math.random() * lines.length)];
+        var w4 = lines[Math.floor(Math.random() * lines.length)];
+        var w5 = lines[Math.floor(Math.random() * lines.length)];
 
-        console.log( "Using words: " + w1 + " " + w2 + " " + w3);
-        
         const response = await ai.models.generateContent({
             model: "gemini-2.5-flash",
-            contents: `Please make a sentance with these words inside: ${w1}, ${w2}, ${w3}`,
+            contents: `Please generate a sentance with the following words included: ${w1}, ${w2}, ${w3}, ${w4}, ${w5} and make it sound british`,
         });
-        console.log(response.text);
+        
+        console.log( `Words: ${w1} ${w2} ${w3} ${w4} ${w5} \n\n${response.text}`);
 
         /*try {
-            await twitterClient.v2.tweet(w1 + " " + w2 + " " + w3)
+            await twitterClient.v2.tweet(`${w1} ${w2} ${w2} \n${response.text}`)
         } catch(err) {
             console.log(err)
         }*/
 
-        webhookClient.send("Words: " + w1 + " " + w2 + " " + w3 + "\n\nGemini response: " + response.text)
+        webhookClient.send(`Words: ${w1} ${w2} ${w3} ${w4} ${w5} \n\n${response.text}`)
     });
 }
 
 //hour interval
 //setInterval(post, 3600000);
 
-setInterval(post, 30000);
+//10 Minute interval
+setInterval(post, 600000);
